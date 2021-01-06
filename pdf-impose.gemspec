@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.files = Dir['{bin,lib}/**/*', 'MIT-LICENSE', 'README.md']
   s.executables << 'impose'
 
-  s.add_dependency 'prawn', '~> 2.0'
+  s.add_dependency 'prawn'
   s.add_dependency 'prawn-templates', '~> 0.0'
   s.add_dependency 'pdf-reader', '~> 1.4'
 end

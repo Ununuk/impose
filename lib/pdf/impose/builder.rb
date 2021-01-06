@@ -12,6 +12,8 @@ require 'pdf/impose/forms/sexto'
 require 'pdf/impose/forms/sextodecimo'
 require 'pdf/impose/signature'
 
+require 'open-uri'
+
 module PDF
   module Impose
     class Builder
@@ -75,7 +77,12 @@ module PDF
 
         @repeat = options[:repeat] || 1
 
-        @source = PDF::Reader.new(source)
+        @source = if options[:from_s3]
+                    io = open(source)
+                    PDF::Reader.new(io)
+                  else
+                    PDF::Reader.new(source)
+                  end
         @destination = Prawn::Document.new(
           skip_page_creation: true, margin: 0,
           page_size: options[:page_size], page_layout: options[:orientation])
@@ -102,7 +109,7 @@ module PDF
       end
 
       def emit(filename)
-        @destination.render_file filename
+        @destination.render_file(filename, true)
       end
 
       def _apply
